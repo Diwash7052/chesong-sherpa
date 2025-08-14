@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday 🎉</title>
+<style>
+/* Magical Gradient Background */
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: 'Poppins', sans-serif;
+  color: white;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a1c4fd);
+  background-size: 400% 400%;
+  animation: bgMove 15s ease infinite;
+}
+@keyframes bgMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Content */
+.container {
+  text-align: center;
+  padding-top: 50px;
+}
+h1 {
+  font-size: 3rem;
+  margin: 15px 0;
+  animation: glow 1.5s infinite alternate;
+}
+@keyframes glow {
+  from { text-shadow: 0 0 10px #fff, 0 0 20px #ff6b6b; }
+  to { text-shadow: 0 0 20px #fff, 0 0 40px #ff4e50; }
+}
+#message {
+  font-size: 1.2rem;
+  height: 40px;
+  margin-bottom: 20px;
+}
+button {
+  background: #ff4e50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+button:hover {
+  transform: scale(1.1);
+}
+
+/* Photo Album */
+.album {
+  margin: 20px auto;
+  width: 320px;
+  height: 320px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+  overflow: hidden;
+  border: 5px solid #ff4e50;
+}
+.album img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Balloons */
+.balloon {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: red;
+  transform: rotate(45deg);
+  border-radius: 50% 50% 0 0;
+  animation: floatUp 6s linear infinite;
+}
+.balloon::before, .balloon::after {
+  content: "";
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: red;
+  border-radius: 50%;
+}
+.balloon::before { left: -25px; }
+.balloon::after { top: -25px; }
+@keyframes floatUp {
+  0% { transform: translateY(100vh) rotate(45deg); opacity: 1; }
+  100% { transform: translateY(-10vh) rotate(45deg); opacity: 0; }
+}
+
+/* Music Icon */
+.music-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #ff4e50;
+  border-radius: 50%;
+  padding: 15px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  display: none;
+  animation: pulse 1.2s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 10px rgba(255,255,255,0.4); }
+  50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(255,255,255,0.8); }
+  100% { transform: scale(1); box-shadow: 0 0 10px rgba(255,255,255,0.4); }
+}
+
+#confettiCanvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+<!-- Music -->
+<audio id="bgMusic" loop>
+  <source src="assets/happy-birthday.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+  <h1>🎂 Happy Birthday, Chesong! 🎂</h1>
+  <div id="message"></div>
+
+  <!-- Photo Album -->
+  <div class="album">
+    <img src="assets/csong1.jpg" alt="Birthday Photo">
+  </div>
+
+  <button id="surpriseBtn">Open Your Surprise 🎁</button>
+</div>
+
+<!-- Floating Music Icon -->
+<div id="musicIcon" class="music-icon">🎶</div>
+
+<div id="balloons"></div>
+<canvas id="confettiCanvas"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+const messages = [
+  "🌟 May your day sparkle brighter than the candles on your cake!",
+  "💖 You are the reason smiles exist — today is all about YOU!",
+  "🎈 Here's to laughter, love, and memories you'll cherish forever.",
+  "🍰 Wishing you a sweet year ahead, just like your heart!",
+  "✨ May all your dreams bloom into reality this year."
+];
+let msgIndex = 0;
+let charIndex = 0;
+
+function typeWriter() {
+  if (charIndex < messages[msgIndex].length) {
+    document.getElementById("message").innerHTML += messages[msgIndex].charAt(charIndex);
+    charIndex++;
+    setTimeout(typeWriter, 70);
+  } else {
+    setTimeout(() => {
+      msgIndex = (msgIndex + 1) % messages.length;
+      charIndex = 0;
+      document.getElementById("message").innerHTML = "";
+      typeWriter();
+    }, 2000);
+  }
+}
+typeWriter();
+
+const surpriseBtn = document.getElementById("surpriseBtn");
+const balloonsContainer = document.getElementById("balloons");
+const confettiCanvas = document.getElementById("confettiCanvas");
+const bgMusic = document.getElementById("bgMusic");
+const musicIcon = document.getElementById("musicIcon");
+
+surpriseBtn.addEventListener("click", () => {
+  playMusic();
+  launchBalloons();
+  startConfetti();
+  musicIcon.style.display = "block"; // show music icon
+});
+
+function playMusic() {
+  bgMusic.play().catch(() => alert("Click again to play music 🎵"));
+}
+
+function launchBalloons() {
+  for (let i = 0; i < 15; i++) {
+    let balloon = document.createElement("div");
+    balloon.classList.add("balloon");
+    balloon.style.left = `${Math.random() * 100}vw`;
+    balloon.style.backgroundColor = getRandomColor();
+    balloon.style.animationDuration = `${Math.random() * 4 + 3}s`;
+    balloonsContainer.appendChild(balloon);
+    setTimeout(() => balloon.remove(), 6000);
+  }
+}
+
+function getRandomColor() {
+  const colors = ["#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF", "#FF4E50"];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function startConfetti() {
+  const confettiInstance = confetti.create(confettiCanvas, { resize: true, useWorker: true });
+  confettiInstance({ particleCount: 200, spread: 120, origin: { y: 0.6 } });
+  let count = 0;
+  let interval = setInterval(() => {
+    confettiInstance({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+    count++;
+    if (count > 5) clearInterval(interval);
+  }, 1000);
+}
+
+// Toggle music play/pause when icon is clicked
+musicIcon.addEventListener("click", () => {
+  if (bgMusic.paused) {
+    bgMusic.play();
+  } else {
+    bgMusic.pause();
+  }
+});
+</script>
+</body>
+</html>
