@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday 🎉</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
 <style>
 /* Magical Gradient Background */
 body {
@@ -28,34 +30,50 @@ body {
   padding-top: 50px;
 }
 h1 {
-  font-size: 3rem;
+  font-family: 'Great Vibes', cursive;
+  font-size: 4rem;
+  font-weight: normal;
+  letter-spacing: 2px;
   margin: 15px 0;
-  animation: glow 1.5s infinite alternate;
+  background: linear-gradient(90deg, #ff6b6b, #ff4e50, #4d96ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; 
+ 
 }
 @keyframes glow {
-  from { text-shadow: 0 0 10px #fff, 0 0 20px #ff6b6b; }
-  to { text-shadow: 0 0 20px #fff, 0 0 40px #ff4e50; }
+  from { text-shadow: 0 0 15px #ff6b6b, 0 0 30px #ff4e50; }
+  to { text-shadow: 0 0 25px #ffd93d, 0 0 45px #4d96ff; }
 }
+
+
 #message {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #ffd93d, #ff6b6b, #fbc2eb);
+  -webkit-background-clip: text;
+   color: rgb(106, 104, 104);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
   height: 40px;
   margin-bottom: 20px;
 }
 button {
-  background: #ff4e50;
+  background: linear-gradient(135deg, #ff6b6b, #ff4e50, #ffd93d);
   color: white;
   border: none;
   padding: 12px 24px;
   font-size: 1.2rem;
-  border-radius: 8px;
+  font-weight: bold;
+  border-radius: 10px;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  transition: transform 0.2s, box-shadow 0.3s;
 }
 button:hover {
   transform: scale(1.1);
+  box-shadow: 0 0 20px #ffd93d, 0 0 30px #ff6b6b;
 }
 
-/* Photo Album */
+/* Photo Album Carousel */
 .album {
   margin: 20px auto;
   width: 320px;
@@ -64,12 +82,21 @@ button:hover {
   border-radius: 15px;
   box-shadow: 0 5px 25px rgba(0,0,0,0.3);
   overflow: hidden;
-  border: 5px solid #ff4e50;
+  border: px solid #ff4e50;
+  position: relative;
 }
 .album img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+.album img.active {
+  opacity: 1;
 }
 
 /* Balloons */
@@ -135,9 +162,17 @@ button:hover {
   <h1>🎂 Happy Birthday, Chesong! 🎂</h1>
   <div id="message"></div>
 
-  <!-- Photo Album -->
+  <!-- Photo Album Carousel -->
   <div class="album">
-    <img src="assets/csong1.jpg" alt="Birthday Photo">
+    <img src="assets/csong1.jpg" alt="Photo 1" class="active">
+    <img src="assets/csong2.jpg" alt="Photo 2">
+    <img src="assets/csong3.jpg" alt="Photo 3">
+    <img src="assets/csong4.jpg" alt="Photo 4">
+    <img src="assets/csong5.jpg" alt="Photo 5">
+    <img src="assets/csong6.jpg" alt="Photo 6">
+    <img src="assets/csong7.jpg" alt="Photo 7">
+    <img src="assets/csong8.jpg" alt="Photo 8">
+    <img src="assets/csong9.jpg" alt="Photo 9">
   </div>
 
   <button id="surpriseBtn"> Click for Your Surprise 🎁</button>
@@ -151,7 +186,10 @@ button:hover {
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
+/* Typing Messages */
 const messages = [
+  "💖 Happy Birthday to my favourite star!",
+  "💖 Wishing the best Birthday to the one who makes my heart sing.",
   "🌟 May your day sparkle brighter than the candles on your cake!",
   "💖 You are the reason smiles exist — today is all about YOU!",
   "🎈 Here's to laughter, love, and memories you'll cherish forever.",
@@ -177,6 +215,16 @@ function typeWriter() {
 }
 typeWriter();
 
+/* Album Carousel */
+const albumImages = document.querySelectorAll(".album img");
+let currentImage = 0;
+setInterval(() => {
+  albumImages[currentImage].classList.remove("active");
+  currentImage = (currentImage + 1) % albumImages.length;
+  albumImages[currentImage].classList.add("active");
+}, 3000);
+
+/* Surprise Button */
 const surpriseBtn = document.getElementById("surpriseBtn");
 const balloonsContainer = document.getElementById("balloons");
 const confettiCanvas = document.getElementById("confettiCanvas");
@@ -222,7 +270,7 @@ function startConfetti() {
   }, 1000);
 }
 
-// Toggle music play/pause when icon is clicked
+/* Toggle music play/pause */
 musicIcon.addEventListener("click", () => {
   if (bgMusic.paused) {
     bgMusic.play();
@@ -233,5 +281,3 @@ musicIcon.addEventListener("click", () => {
 </script>
 </body>
 </html>
-
-
